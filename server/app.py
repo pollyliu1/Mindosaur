@@ -5,7 +5,7 @@ from flask import Flask
 app = Flask(__name__)
 
 # Spotify API setup
-spotify_api_key = spotify_api_key = os.getenv('SPOTIFY_API_KEY')
+spotify_api_key = os.getenv('SPOTIFY_API_KEY')
 CLIENT_ID = ''
 CLIENT_SECRET = ''
 REDIRECT_URL = 'http://localhost:5000/callback'
