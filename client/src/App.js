@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import './App.css';
 import VideoComponent from './Components/VideoComponent'; // Adjust the path as per your project structure
 import ImageGenerator from './Assets/ImageGenerator/ImageGenerator';
-import PreLoader from './Components/PreLoader'
 import Animation from './Assets/Animation.mp4';
 import { FaArrowDown } from 'react-icons/fa'; 
 import { useEffect } from 'react';
@@ -28,7 +27,7 @@ function App() {
     // Hide the arrow after an additional 2 seconds
     const timer2 = setTimeout(() => {
       setShowArrow(false);
-    }, 3000);
+    }, 8000);
 
     // Clear timeouts when component unmounts
     return () => {
@@ -36,14 +35,16 @@ function App() {
       clearTimeout(timer2);
     };
   }, []);
-  
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <h1>See what your EEG (electroencephalogram) brain signals can generate!</h1>
-      </header>
-      <VideoComponent src="./Animation.mp4" />
-      <PreLoader />
+      <div className="video-container">
+        <header className="video-overlay-header">
+          <h1>See what your EEG (electroencephalogram) brain signals can generate!</h1>
+        </header>
+        <VideoComponent src="./Animation.mp4" />
+      </div>
       <ImageGenerator onGenerate={handleGenerate} isLoading={isLoading}/>
       {showArrow && (
         <div className="scroll-down">
@@ -55,5 +56,4 @@ function App() {
   );
 }
 
-      
 export default App;

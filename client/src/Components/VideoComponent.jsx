@@ -7,7 +7,7 @@ const VideoComponent = () => {
 
   useEffect(() => {
     // set a timeout to change the state AFTER 3 SECONDS 
-    const timer = setTimeout(() => setIsVisible(false), 3000);
+    const timer = setTimeout(() => setIsVisible(false), 6000);
 
     return () => clearTimeout(timer); 
   }, []);

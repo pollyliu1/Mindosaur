@@ -1,9 +1,28 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './ImageGenerator.css'
-import default_image from './default_image.svg'
 
 const ImageGenerator = () => {
-    const [image_url, setImage_url] = useState("/")
+    const [image_url, setImage_url] = useState(null);
+
+    const createSpotifyPlaylist = async () => {
+        const accessToken = localStorage.getItem('accessToken');
+        const response = await fetch('https://api.spotify.com/v1/users/user_id/playlists', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                name: 'Your Brainwave Playlist',
+                description: 'A playlist generated from your brainwave signals',
+                public: false, // or true, based on your requirement
+            }),
+        });
+
+        const data = await response.json();
+        console.log(data);
+
+    };
 
     const imageGenerator = async () =>{
         // Fetch the prompt from your backend
@@ -38,18 +57,24 @@ const ImageGenerator = () => {
         // Update the following line according to the actual response structure from the API
         setImage_url(data.image_url); // Update this based on actual response property
         //setImage_url(data.data.images[0]);
-    }
+    };
+
+    // fetch default image on component mount 
+    useEffect(() => {
+        imageGenerator();
+    }, []);
 
 
   return (
     <div className='ai-image-generator'>
-        <div className="header">Emotion <span>Visualization</span></div>
+        <div className="header">Emotion AI <span>Visualization</span></div>
         <div className="img-loading">
-            <div className="image"><img src={image_url==="/"?default_image:image_url} alt="" /></div>
+            <div className="image">
+                <img src={image_url} alt="Click generate to see your Spotify playlist!" /></div>
         </div>
         <div className="generate-btn" onClick={()=>{imageGenerator()}}>Generate</div>
-
-    </div>
+        This artwork is generated from your brainwave signals.
+        </div>
   )
 }
 
