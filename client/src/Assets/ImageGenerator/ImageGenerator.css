@@ -1,0 +1,42 @@
+.ai-image-generator{
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    align-items: center;
+    margin-top: 80px;
+    margin-bottom: 20px;
+    gap: 30px;
+}
+
+.header{
+    font-size: 70px;
+    font-weight: 500;
+    padding-bottom: 30px;
+
+}
+
+.header span{
+    color: #DE1B89;
+    font-weight: 600;
+}
+
+.img-loading{
+    display: flex;
+    flex-direction: column;
+}
+
+.img-loading img{
+    width: 512px;
+}
+
+.generate-btn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 300px;
+    height: 85px;
+    font-size: 20px;
+    border-radius: 50px;
+    background: #AE1D89;
+    cursor: pointer;
+}

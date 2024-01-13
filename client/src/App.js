@@ -1,23 +1,26 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
+import VideoComponent from './Components/VideoComponent'; // Adjust the path as per your project structure
+import ImageGenerator from './Assets/ImageGenerator/ImageGenerator';
+import PreLoader from './Components/PreLoader'
+import Animation from './Assets/Animation.mp4';
 
 function App() {
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleGenerate = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 3000); 
+  };
+  
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <VideoComponent src="./Animation.mp4" />
+      <PreLoader />
+      <ImageGenerator/>
     </div>
   );
 }
