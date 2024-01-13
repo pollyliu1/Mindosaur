@@ -36,3 +36,34 @@
     transform: rotate(360deg);
   }
 }
+.scroll-down {
+  position: fixed; /* or absolute, depending on your layout */
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  cursor: pointer;
+  animation: bounce 2s infinite;
+}
+
+.scroll-down p {
+  margin-top: 5px;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-20px);
+  }
+  60% {
+    transform: translateY(-10px);
+  }
+}
+
+.App-header {
+  text-align: center;
+  padding: 20px;
+  color: #f5f5f5; /* Example text color */
+}

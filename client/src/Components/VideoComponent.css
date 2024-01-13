@@ -1,3 +1,9 @@
+body, html {
+  margin: 0;
+  padding: 0;
+}
+
+
 /* VideoComponent.css */
 .video-container {
     transition: opacity 2s ease-out;
@@ -6,5 +12,11 @@
   
   .fade-out {
     opacity: 0;
+  }
+
+  .video-container video {
+    width: 100%;
+    height: auto;
+    display: block; /* Removes the default margin of inline elements */
   }
   

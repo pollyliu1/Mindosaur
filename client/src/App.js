@@ -4,10 +4,13 @@ import VideoComponent from './Components/VideoComponent'; // Adjust the path as 
 import ImageGenerator from './Assets/ImageGenerator/ImageGenerator';
 import PreLoader from './Components/PreLoader'
 import Animation from './Assets/Animation.mp4';
+import { FaArrowDown } from 'react-icons/fa'; 
+import { useEffect } from 'react';
 
 function App() {
 
   const [isLoading, setIsLoading] = useState(false);
+  const [showArrow, setShowArrow] = useState(false);
 
   const handleGenerate = () => {
     setIsLoading(true);
@@ -15,14 +18,42 @@ function App() {
       setIsLoading(false);
     }, 3000); 
   };
+
+  useEffect(() => {
+    // Show the arrow after 1 second
+    const timer1 = setTimeout(() => {
+      setShowArrow(true);
+    }, 1000);
+
+    // Hide the arrow after an additional 2 seconds
+    const timer2 = setTimeout(() => {
+      setShowArrow(false);
+    }, 3000);
+
+    // Clear timeouts when component unmounts
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+    };
+  }, []);
   
   return (
     <div className="App">
+      <header className="App-header">
+        <h1>See what your EEG (electroencephalogram) brain signals can generate!</h1>
+      </header>
       <VideoComponent src="./Animation.mp4" />
       <PreLoader />
-      <ImageGenerator/>
+      <ImageGenerator onGenerate={handleGenerate} isLoading={isLoading}/>
+      {showArrow && (
+        <div className="scroll-down">
+          <FaArrowDown />
+          <p>Scroll Down</p>
+        </div>
+      )}
     </div>
   );
 }
 
+      
 export default App;
