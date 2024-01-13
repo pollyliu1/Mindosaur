@@ -1,23 +1,18 @@
-import os # spotify API
-import requests
-from flask import Flask
+from flask import Flask, request, jsonify
+from brainflowart import main as brainflow_art_main
 
 app = Flask(__name__)
-
-# Spotify API setup
-spotify_api_key = os.getenv('SPOTIFY_API_KEY')
-CLIENT_ID = ''
-CLIENT_SECRET = ''
-REDIRECT_URL = 'http://localhost:5000/callback'
-
-AUTH_URL = 'https://accounts.spotify.com/authorize'
-TOKEN_URL = 'https://accounts.spotify.com/api/token'
-API_BASE_URL = 'https://api.spotify.com/v1'
-
 
 @app.route('/')
 def home():
     return 'Hello, World!'
 
+# This is the route to the root of the server
+@app.route('/generate-prompt', methods=['GET'])
+def generate_prompt():
+    prompt = brainflow_art_main() # Run the main function from brainflow-art.py
+    return jsonify({'prompt': prompt})
+
 if __name__ == '__main__':
     app.run(debug=True)
+
