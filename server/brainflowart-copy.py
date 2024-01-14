@@ -10,10 +10,24 @@ import matplotlib.pyplot as plt
 import os 
 import requests
 from dotenv import load_dotenv
+from Billboard import Billboard 
 
 from brainflow.board_shim import BoardShim, BrainFlowInputParams, LogLevels, BoardIds
 from brainflow.data_filter import DataFilter, FilterTypes, AggOperations, WindowOperations, DetrendOperations, NoiseTypes
-from config import BASE_PROMPT
+
+
+load_dotenv() 
+
+spotify_client_id = os.getenv('CLIENT_ID')
+spotify_client_secret = os.getenv('CLIENT_SECRET')
+user_id = os.getenv("USER_ID")
+authorization_url = "https://accounts.spotify.com/authorize"
+redirect_uri = "https://example.com/callback"
+token_url = "https://accounts.spotify.com/api/token"
+creation_playlist_endpoint = f"https://api.spotify.com/v1/users/{user_id}/playlists"
+
+scope = "playlist-modify-public playlist-modify-private"
+
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -74,63 +88,39 @@ def generate_music_prompt(mood):
     elif mood == "creative/meditative":
         return "classical"
     elif mood == "relaxed/focused":
-        return "harmonious."
+        return "harmonious"
     elif mood == "active/stressed":
-        return "energetic."
+        return "energetic"
     elif mood == "high cognitive processing":
-        return "vibrant."
+        return "vibrant"
     else:
         return
 
+def generate_facials_prompt(mood):
+    if mood == "deep sleep" or "creative/meditative" or "relaxed/focused":
+        return "calm" 
+    elif mood == "active/stressed":
+        return "anxious"
+    elif mood == "high cognitive processing":
+        return "happy"
 
 def read_eeg_data_from_file(file_path):
     # Adjust the number of columns according to your file format
     columns = ["Index"] + [f"Channel_{i}" for i in range(8)] + ["Other_data"]
     return pd.read_csv(file_path, skiprows=4, header=None, names=columns)
 
-
-def get_spotify_token():
-    auth_url = 'https://accounts.spotify.com/api/token'
-    auth_response = requests.post(auth_url, {
-        'grant_type': 'client_credentials',
-        'client_id': spotify_client_id,
-        'client_secret': spotify_client_secret,
-    })
-    auth_response_data = auth_response.json()
-    return auth_response_data['access_token']
-
-def create_spotify_playlist(user_id, token, mood):
-    url = f'https://api.spotify.com/v1/users/{user_id}/playlists'
-    headers = {
-        'Authorization': f'Bearer {token}',
-        'Content-Type': 'application/json'
+    # Define keywords for each mood to search for songs
+    mood_keywords = {
+        "deep sleep": "calm",
+        "creative/meditative": "meditative",
+        "relaxed/focused": "relaxing",
+        "active/stressed": "energetic",
+        "high cognitive processing": "intense"
     }
-    payload = {
-        'name': f'Mood Playlist: {mood}',
-        'description': f'Playlist based on mood: {mood}',
-        'public': False
-    }
-    response = requests.post(url, headers=headers, json=payload)
-    return response.json()['id']
 
+    # Default keyword if mood is unknown or not in the dictionary
+    keyword = mood_keywords.get(mood, "music")
 
-def find_songs_for_mood(mood, token):
-    # Replace with your logic to find songs based on mood
-    # For example, you can use Spotify's search API
-    # This is a placeholder function
-    return []
-
-def add_songs_to_playlist(playlist_id, songs, token):
-    url = f'https://api.spotify.com/v1/playlists/{playlist_id}/tracks'
-    headers = {
-        'Authorization': f'Bearer {token}',
-        'Content-Type': 'application/json'
-    }
-    payload = {
-        'uris': songs
-    }
-    response = requests.post(url, headers=headers, json=payload)
-    return response.status_code == 201
 
 # Flask route to generate prompt
 @app.route('/generate-prompt', methods=['GET'])
@@ -160,13 +150,6 @@ def generate_prompt():
     mood = infer_mood_from_eeg(eeg_channel_data, sampling_rate)
     prompt = generate_artwork_prompt(mood)
     spotify_prompt = generate_music_prompt(mood)
-    
-    #Spotify playlist creation
-    token = get_spotify_token()
-    playlist_id = create_spotify_playlist(spotify_user_id, token, mood)
-    songs = find_songs_for_mood(spotify_prompt, token)
-    if songs:
-        add_songs_to_playlist(playlist_id, songs, token)
     
     
     print(prompt)
