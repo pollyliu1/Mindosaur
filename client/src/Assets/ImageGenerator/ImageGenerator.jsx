@@ -30,6 +30,8 @@ const ImageGenerator = () => {
 
         console.log(image.data[0].url);
         setImage_url(image.data[0].url); // Update this based on actual response property
+        setPlaylistUrl(promptData.playlist_url);
+        
         setIsLoading(false);
 
         // call OpenAI's API with the fetched prompt
@@ -81,8 +83,9 @@ const ImageGenerator = () => {
             <p>This artwork is generated from your brainwave signals:</p>
             <div className="generate-btn" onClick={imageGenerator}>Request Image</div>
             {/* <div className="generate-btn" onClick={imageGenerator}>Generate</div> */}
+            {playlistUrl && <p><a href={playlistUrl} target="_blank" rel="noopener noreferrer">View Your Spotify Playlist</a></p>}
         </div>
     );
-}
+};
 
 export default ImageGenerator

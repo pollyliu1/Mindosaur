@@ -2,14 +2,16 @@ from flask import Flask, request, jsonify, redirect
 import requests
 import os
 from dotenv import load_dotenv
+from bs4 import BeautifulSoup
 from Billboard import Billboard
+
 
 load_dotenv("variables.env")
 client_id = os.getenv("CLIENT_ID")
 client_secret = os.getenv("CLIENT_SECRET")
 user_id = os.getenv("USER_ID")
 authorization_url = "https://accounts.spotify.com/authorize"
-redirect_uri = "https://localhost:5000.com/callback"
+redirect_uri = "https://localhost:5000/callback"
 token_url = "https://accounts.spotify.com/api/token"
 creation_playlist_endpoint = f"https://api.spotify.com/v1/users/{user_id}/playlists"
 
@@ -42,7 +44,7 @@ class Spotify:
 
         response = requests.get(authorization_url, params=authorization_params)
         print(response.url)
-        authorization_code = input("Enter the authorization code: ")
+        authorization_code = "AQA16e5d8_9H-HTev7gZYDDXAnZXtfVHg9l-vFXjkAoTFKeZBGrl10CSMkG6O2gHgw53TF5Ub0664CKUDQ7qGvXFRFXrJ5FBLvvZ5efhZw9E7cvKEMk3CX3-OuVwSk1ZqvmFuk42t52XYZn1o6qfMgWnFUvkMjS3EeRVAi1MjnCDd059utxJ73Oq9gNhlsU3krowMz5cEsZRI4KdeMH2OeZpjEF7PzMeeexQJFVUbKcoH3XN"
         # Step 2: Exchange authorization code for access token
 
         data = {
