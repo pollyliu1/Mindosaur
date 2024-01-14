@@ -1,4 +1,4 @@
-from flask import Flask, jsonify 
+from flask import Flask, jsonify, Blueprint
 from flask_cors import CORS, cross_origin
 import brainflow
 import numpy as np
@@ -10,24 +10,10 @@ import matplotlib.pyplot as plt
 import os 
 import requests
 from dotenv import load_dotenv
-from Billboard import Billboard 
+
 
 from brainflow.board_shim import BoardShim, BrainFlowInputParams, LogLevels, BoardIds
 from brainflow.data_filter import DataFilter, FilterTypes, AggOperations, WindowOperations, DetrendOperations, NoiseTypes
-
-
-load_dotenv() 
-
-spotify_client_id = os.getenv('CLIENT_ID')
-spotify_client_secret = os.getenv('CLIENT_SECRET')
-user_id = os.getenv("USER_ID")
-authorization_url = "https://accounts.spotify.com/authorize"
-redirect_uri = "https://example.com/callback"
-token_url = "https://accounts.spotify.com/api/token"
-creation_playlist_endpoint = f"https://api.spotify.com/v1/users/{user_id}/playlists"
-
-scope = "playlist-modify-public playlist-modify-private"
-
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -127,9 +113,8 @@ def read_eeg_data_from_file(file_path):
 
 
 # Flask route to generate prompt
-@app.route('/generate-prompt', methods=['GET'])
+@app.route('/g-prompt', methods=['GET'])
 @cross_origin()
-
 def generate_prompt():
     file_path = './OpenBCI_GUI-v5-meditation_copy.txt'
     eeg_data = (read_eeg_data_from_file('./OpenBCI_GUI-v5-meditation_copy.txt'))
@@ -154,21 +139,8 @@ def generate_prompt():
     # Infer mood from EEG data
     mood = infer_mood_from_eeg(eeg_channel_data, sampling_rate)
     prompt = generate_artwork_prompt(mood)
-    spotify_prompt = generate_music_prompt(mood)
-    
-    try:
-        response = requests.post('http://localhost:5001/receive-mood', json={'mood': spotify_prompt})
-        if response.status_code != 200:
-            print("Error sending mood to Spotify service")
-        # Handle error appropriately
-    except requests.RequestException as e:
-        print(f"Request failed: {e}")
-    # Handle exception
-
-    
     print(prompt)
-    print(spotify_prompt)
-    return jsonify({'prompt': prompt}), jsonify({'prompt': prompt, 'spotify_prompt': spotify_prompt})
+    return jsonify({'prompt': prompt}), jsonify({'prompt': prompt})
 
 
 if __name__ == "__main__":

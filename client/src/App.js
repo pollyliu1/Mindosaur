@@ -45,7 +45,7 @@ function App() {
         </header>
         <VideoComponent src="./Animation.mp4" />
       </div>
-      <ImageGenerator onGenerate={handleGenerate} isLoading={isLoading}/>
+      <ImageGenerator onGenerate={handleGenerate} isLoading={isLoading} />
       {showArrow && (
         <div className="scroll-down">
           <FaArrowDown />
