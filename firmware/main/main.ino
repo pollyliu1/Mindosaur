@@ -13,7 +13,12 @@ int HAPPY = 2;
 int last_mood = "";
 
 void setup() {
-
+  // Amogi Setup
+  int array_size = sizeof(amogi_note) / sizeof(amogi_note[0]);
+  for (int i = 0; i < array_size; i++) {
+    tone(PIN_IN, amogi_note[i], amogi_dur[i]);
+    delay(amogi_dur[i]); // Add delay for note duration
+  }
 }
 
 void loop() {

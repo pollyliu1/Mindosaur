@@ -43,8 +43,30 @@ int happy_dur[] = {
 };
 
 int amogi_note[] = {
-
+  NOTE_F5,
+  NOTE_GS5,
+  NOTE_AS5,
+  NOTE_B5,
+  NOTE_AS5,
+  NOTE_GS5,
+  NOTE_F5,
+  NOTE_DS5,
+  NOTE_GS5,
+  NOTE_F5,
+  NOTE_F4,
+  NOTE_F4
 };
 int amogi_dur[] = {
-
+  Q_NOTE,
+  Q_NOTE,
+  Q_NOTE,
+  Q_NOTE,
+  Q_NOTE,
+  Q_NOTE,
+  W_NOTE,
+  E_NOTE,
+  E_NOTE,
+  W_NOTE,
+  Q_NOTE,
+  Q_NOTE
 };
