@@ -1,6 +1,11 @@
 #include <string.h>
 #include "buzzer.h"
 
+// Pins
+int SERVO1_PIN = 8;
+int SERVO2_PIN = 9;
+int BUZZER_PIN = 10;
+
 // Moods
 int CALM = 0;
 int ANXIOUS = 1;
@@ -15,8 +20,11 @@ void loop() {
   // LCD
 
 
+  // Servos
+
+
   // Buzzer
-  int received_mood = HAPPY; // CHANGE FOR PARSING
+  int received_mood = CALM; // CHANGE FOR PARSING
   if (last_mood != received_mood) {
     int* mood_notes;
     int* mood_dur;
@@ -43,6 +51,4 @@ void loop() {
 
     last_mood = received_mood;
   }
-
-
 }
