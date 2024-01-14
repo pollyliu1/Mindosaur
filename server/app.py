@@ -129,12 +129,11 @@ def main():
 @app.route('/receive-mood', methods=['POST'])
 def receive_mood():
     mood = request.json['mood']
-    billboard = Billboard() # You may need to adjust how you use Billboard here
-    billboard.set_mood(mood) # Assuming Billboard class has a method to set mood
 
-    spotify = Spotify(billboard)
+    spotify = Spotify()
     playlist_id = spotify.create_playlist()
     spotify.add_song_to_playlist()
+    playlist_url = f"https://open.spotify.com/playlist/{playlist_id}"
 
     return jsonify({"playlist_id": playlist_id})
 

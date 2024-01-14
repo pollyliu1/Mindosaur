@@ -7,30 +7,12 @@ const openai = new OpenAI({ apiKey: 'sk-wy4dcgyJybt65nNCaixjT3BlbkFJ2mpRLKpua800
 const ImageGenerator = () => {
     const [image_url, setImage_url] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [playlistUrl, setPlaylistUrl] = useState(null); // New state for playlist URL
 
-    
-    const createSpotifyPlaylist = async () => {
-        const accessToken = localStorage.getItem('accessToken');
-        const response = await fetch('https://api.spotify.com/v1/users/user_id/playlists', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${accessToken}`,
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                name: 'Your Brainwave Playlist',
-                description: 'A playlist generated from your brainwave signals',
-                public: false, // or true, based on your requirement
-            }),
-        });
-
-        const data = await response.json();
-        console.log(data);
-
-    };
-    
 
     console.log(process.env.REACT_APP_API_KEY);
+    
+    
     const imageGenerator = async () =>{
         setIsLoading(true);
         try {
