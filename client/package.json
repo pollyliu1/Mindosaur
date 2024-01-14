@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^13.5.0",
     "gsap": "^3.12.4",
     "lil-gui": "^0.19.1",
+    "openai": "^4.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^5.0.1",
