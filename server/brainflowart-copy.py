@@ -125,6 +125,7 @@ def read_eeg_data_from_file(file_path):
 # Flask route to generate prompt
 @app.route('/generate-prompt', methods=['GET'])
 @cross_origin()
+
 def generate_prompt():
     file_path = './OpenBCI_GUI-v5-meditation_copy.txt'
     eeg_data = (read_eeg_data_from_file('./OpenBCI_GUI-v5-meditation_copy.txt'))
@@ -151,6 +152,15 @@ def generate_prompt():
     prompt = generate_artwork_prompt(mood)
     spotify_prompt = generate_music_prompt(mood)
     
+    try:
+        response = requests.post('http://localhost:5001/receive-mood', json={'mood': spotify_prompt})
+        if response.status_code != 200:
+            print("Error sending mood to Spotify service")
+        # Handle error appropriately
+    except requests.RequestException as e:
+        print(f"Request failed: {e}")
+    # Handle exception
+
     
     print(prompt)
     print(spotify_prompt)

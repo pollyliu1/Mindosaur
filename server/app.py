@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request, jsonify, redirect
 import requests
 import os
 from dotenv import load_dotenv
@@ -9,7 +9,7 @@ client_id = os.getenv("CLIENT_ID")
 client_secret = os.getenv("CLIENT_SECRET")
 user_id = os.getenv("USER_ID")
 authorization_url = "https://accounts.spotify.com/authorize"
-redirect_uri = "https://example.com/callback"
+redirect_uri = "https://localhost:5000.com/callback"
 token_url = "https://accounts.spotify.com/api/token"
 creation_playlist_endpoint = f"https://api.spotify.com/v1/users/{user_id}/playlists"
 
@@ -18,7 +18,6 @@ scope = "playlist-modify-public playlist-modify-private"
 
 app = Flask(__name__)
 
-@app.route('/')
 class Spotify:
     def __init__(self, billboard: Billboard):
         self.billboard = billboard
@@ -62,10 +61,11 @@ class Spotify:
         response = requests.get("https://api.spotify.com/v1/me", headers=self.headers_authentication)
         print(response.json())
 
-    def create_playlist(self):
+    def create_playlist(self, mood):
+        playlist_name = f"Mood-Based Playlist: {mood}"
 
         body = {
-            "name": f"Top 100 Hits for {self.billboard.prompt} period",
+            "name": playlist_name,
             "description": f"My awesome new playlist for {self.billboard.prompt} period",
             "public": False,
         }
@@ -94,6 +94,49 @@ class Spotify:
             except requests.exceptions.HTTPError as error:
                 print(f"Error adding track {index + 1} to playlist: {error}")
 
+@app.route('/')
+def index():
+    return redirect(
+        f"{authorization_url}?client_id={client_id}&response_type=code&redirect_uri={redirect_uri}&scope={scope}"
+    )
+
+@app.route('/callback')
+def callback():
+    code = request.args.get('code')
+    # Use 'code' to obtain an access token
+    # Then instantiate Spotify class and perform actions
+    data = {
+            "grant_type": "authorization_code",
+            "code": code,
+            "redirect_uri": redirect_uri,
+            "client_id": client_id,
+            "client_secret": client_secret,
+        }
+    response = requests.post(token_url, data=data)
+    if response.status_code == 200:
+            access_token = response.json()["access_token"]
+    else:
+            print("Error getting access token:", response.json())
+    return "Callback processed"     
+
+def main():
+    billboard = Billboard()
+    billboard.retrieve_songs()
+
+    spotify = Spotify(billboard)
+    spotify.add_song_to_playlist()
+
+@app.route('/receive-mood', methods=['POST'])
+def receive_mood():
+    mood = request.json['mood']
+    billboard = Billboard() # You may need to adjust how you use Billboard here
+    billboard.set_mood(mood) # Assuming Billboard class has a method to set mood
+
+    spotify = Spotify(billboard)
+    playlist_id = spotify.create_playlist()
+    spotify.add_song_to_playlist()
+
+    return jsonify({"playlist_id": playlist_id})
 
 if __name__ == '__main__':
     app.run(debug=True)
