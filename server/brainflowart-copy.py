@@ -97,12 +97,23 @@ def generate_music_prompt(mood):
         return
 
 def generate_facials_prompt(mood):
-    if mood == "deep sleep" or "creative/meditative" or "relaxed/focused":
-        return "calm" 
-    elif mood == "active/stressed":
-        return "anxious"
-    elif mood == "high cognitive processing":
-        return "happy"
+    mood_to_facials = {
+        0: "calm",  # deep sleep
+        1: "calm",  # creative/meditative
+        2: "calm",  # relaxed/focused
+        3: "anxious",  # active/stressed
+        4: "happy"  # high cognitive processing
+    }
+
+    mood_indices = {
+        "deep sleep": 0,
+        "creative/meditative": 1,
+        "relaxed/focused": 2,
+        "active/stressed": 3,
+        "high cognitive processing": 4
+    }
+
+    return mood_to_facials.get(mood_indices.get(mood, 0), "calm") 
 
 def read_eeg_data_from_file(file_path):
     # Adjust the number of columns according to your file format
