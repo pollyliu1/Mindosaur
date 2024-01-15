@@ -10,6 +10,7 @@ function App() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [showArrow, setShowArrow] = useState(false);
+  const [showImage, setShowImage] = useState(false); // Add this state variable
 
   const handleGenerate = () => {
     setIsLoading(true);
@@ -45,7 +46,7 @@ function App() {
         </header>
         <VideoComponent src="./Animation.mp4" />
       </div>
-      <ImageGenerator onGenerate={handleGenerate} isLoading={isLoading} />
+      <ImageGenerator isLoading={isLoading} />
       {showArrow && (
         <div className="scroll-down">
           <FaArrowDown />
