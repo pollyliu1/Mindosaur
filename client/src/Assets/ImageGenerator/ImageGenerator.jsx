@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import './ImageGenerator.css'
 import OpenAI from "openai";
-const openai = new OpenAI({ apiKey: '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', dangerouslyAllowBrowser: true });
-// const openai = new OpenAI();
+const openai = new OpenAI({ apiKey: '', dangerouslyAllowBrowser: true });
+// const openai = new OpenAI(); 
 
 const ImageGenerator = () => {
     const [image_url, setImage_url] = useState(null);
@@ -15,16 +15,21 @@ const ImageGenerator = () => {
         setIsLoading(true);
         try {
         // Fetch the prompt from your backend
-        const promptResponse = await fetch('http://localhost:5000/g-prompt'); // Adjust the URL as needed
-        if (!promptResponse.ok) {
-            throw new Error('Network response was not ok.');
-        }
-        
-        const promptData = await promptResponse.json();
-        const prompt = promptData.prompt;
+        const promptResponse = await fetch('http://localhost:5000/g-prompt')
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error('Network response was not ok.');
+                } else {
+                    return res.json()
+                }
+            });
+            // Adjust the URL as needed
+
+        const prompt = promptResponse.prompt;
 
         const image = await openai.images.generate({ model: "dall-e-3", prompt });
         
+        alert('finished')
         console.log(image.data[0].url);
         setImage_url(image.data[0].url); // Update this based on actual response property
         setIsLoading(false);

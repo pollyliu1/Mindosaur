@@ -135,12 +135,14 @@ def generate_prompt():
     fft_frequencies = np.fft.fftfreq(len(eeg_channel_data), d=1/sampling_rate)
     psd = np.abs(fft_result) ** 2
 
-    
     # Infer mood from EEG data
     mood = infer_mood_from_eeg(eeg_channel_data, sampling_rate)
     prompt = generate_artwork_prompt(mood)
     print(prompt)
-    return jsonify({'prompt': prompt}), jsonify({'prompt': prompt})
+    return {
+        "prompt": prompt
+    }
+    # return jsonify({'prompt': prompt}), jsonify({'prompt': prompt})
 
 
 if __name__ == "__main__":

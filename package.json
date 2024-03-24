@@ -1,0 +1,11 @@
+{
+  "name": "mindosaur",
+  "version": "1.0.0",
+  "description": "![IMG_4420](https://github.com/pollyliu1/Mindosaur/assets/109643560/05eacd39-8ae7-4f3c-af63-e3dd56136458)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
